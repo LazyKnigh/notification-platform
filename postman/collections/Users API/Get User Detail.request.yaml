@@ -1,0 +1,17 @@
+$kind: http-request
+name: Get User Detail
+url: "{{base_url}}/users/{{user_id}}"
+method: GET
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 200", function () {
+        pm.response.to.have.status(200);
+      });
+
+      pm.test("Response has correct user id", function () {
+        const json = pm.response.json();
+        pm.expect(String(json.id)).to.eql(String(pm.environment.get("user_id")));
+      });
+    language: text/javascript
+order: 804611366657514

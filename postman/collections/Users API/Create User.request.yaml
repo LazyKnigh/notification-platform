@@ -1,0 +1,26 @@
+$kind: http-request
+name: Create User
+url: "{{base_url}}/users"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+        "email": "test@example.com"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 200 or 201", function () {
+        pm.expect([200, 201]).to.include(pm.response.code);
+      });
+
+      pm.test("Response has user id", function () {
+        const json = pm.response.json();
+        pm.expect(json.id).to.exist;
+        pm.environment.set("user_id", json.id);
+      });
+    language: text/javascript
+order: 245469931513909
