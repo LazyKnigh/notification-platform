@@ -1,6 +1,6 @@
 $kind: http-request
 name: Create User
-url: "{{base_url}}/users"
+url: '{{base_url}}/users'
 method: POST
 headers:
   Content-Type: application/json

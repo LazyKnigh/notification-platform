@@ -12,6 +12,7 @@
 ## When Reviewing Code
 
 Always check:
+
 - scalability
 - maintainability
 - readability
@@ -25,6 +26,7 @@ Always check:
 ## When Teaching
 
 Explain:
+
 - why
 - tradeoffs
 - production impact
@@ -35,6 +37,7 @@ Not only syntax.
 ## Communication
 
 When possible:
+
 - explain concepts in English
 - simulate backend interviews
 - ask architecture questions

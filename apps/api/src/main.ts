@@ -21,4 +21,4 @@ async function bootstrap() {
   console.log(`Application running on port ${port}`);
 }
 
-bootstrap();
+void bootstrap();

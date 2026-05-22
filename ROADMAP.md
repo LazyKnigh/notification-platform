@@ -7,15 +7,18 @@ You already have work experience with Node.js and GraphQL, so this roadmap shoul
 ## Direction
 
 API strategy:
+
 - REST first for command/write and operational flows.
 - GraphQL later for read/query flows.
 
 Why:
+
 - REST is simple and explicit for creating notifications, retrying deliveries, and inspecting operational state.
 - GraphQL is useful later for flexible history/detail queries and practicing resolver performance, pagination, and N+1 awareness.
 - Building both is useful for interviews, but adding GraphQL too early will make the project broader before the core system is reliable.
 
 Work rhythm:
+
 - Business days: small tasks that can be finished in a short session.
 - Weekend: deeper implementation, cleanup, and review.
 - Every completed phase should produce working code, verification, notes, and an interview explanation.
@@ -23,6 +26,7 @@ Work rhythm:
 ## Current Snapshot
 
 Already implemented:
+
 - NestJS API app in `apps/api`.
 - Prisma + MySQL.
 - Global validation pipe.
@@ -31,6 +35,7 @@ Already implemented:
 - Postman collection for Users API.
 
 Not implemented yet:
+
 - Core notification domain.
 - Queue/worker.
 - Redis.
@@ -42,6 +47,7 @@ Not implemented yet:
 ## Scope Rules
 
 Build now:
+
 - Notification REST API.
 - MySQL persistence.
 - Redis/BullMQ queue.
@@ -53,6 +59,7 @@ Build now:
 - GraphQL read layer after the REST flow works.
 
 Delay:
+
 - Kafka implementation.
 - SMS/push/webhook channels.
 - Admin dashboard UI.
@@ -69,6 +76,7 @@ Kafka should be studied as a comparison topic only: when Redis queue is enough, 
 Goal: make the repo reliable to run and easy to explain.
 
 Deliverables:
+
 - [ ] Improve README with local setup instructions.
 - [ ] Add `.env.example`.
 - [ ] Document required services: MySQL now, Redis later.
@@ -77,11 +85,13 @@ Deliverables:
 - [ ] Define a simple error response convention.
 
 Learning focus:
+
 - Local development workflow.
 - Environment configuration.
 - Basic API maintainability.
 
 Interview output:
+
 - Explain how the app starts locally.
 - Explain why environment variables should be documented.
 - Explain how validation and error responses improve API reliability.
@@ -91,6 +101,7 @@ Interview output:
 Goal: create the first notification domain without queue processing.
 
 Deliverables:
+
 - [ ] Add Prisma models for `Notification` and `NotificationDelivery`.
 - [ ] Add status/channel enums.
 - [ ] Implement `POST /notifications`.
@@ -101,6 +112,7 @@ Deliverables:
 - [ ] Add Postman requests or tests for the new APIs.
 
 Learning focus:
+
 - REST API design.
 - Database relationships.
 - Transactions.
@@ -108,6 +120,7 @@ Learning focus:
 - Pagination and filtering.
 
 Interview output:
+
 - Explain why notification and delivery are separate concepts.
 - Explain why creation should use a transaction.
 - Explain offset pagination vs cursor pagination.
@@ -118,6 +131,7 @@ Interview output:
 Goal: move delivery processing out of the API request path.
 
 Deliverables:
+
 - [ ] Add Redis to Docker Compose.
 - [ ] Install and configure BullMQ.
 - [ ] Create notification delivery queue.
@@ -127,12 +141,14 @@ Deliverables:
 - [ ] Update delivery status from worker.
 
 Learning focus:
+
 - Async processing.
 - Queue architecture.
 - Worker lifecycle.
 - API responsiveness.
 
 Interview output:
+
 - Explain why sending notification inside the API request is risky.
 - Explain the API-to-queue-to-worker flow.
 - Explain what happens when workers are slower than incoming traffic.
@@ -143,6 +159,7 @@ Interview output:
 Goal: make the delivery flow handle common failure cases.
 
 Deliverables:
+
 - [ ] Add retry and backoff config for queue jobs.
 - [ ] Store attempt count and last error.
 - [ ] Add `idempotencyKey` for notification creation.
@@ -151,6 +168,7 @@ Deliverables:
 - [ ] Add failed job inspection notes.
 
 Learning focus:
+
 - Retry strategy.
 - Backoff.
 - Idempotency.
@@ -158,6 +176,7 @@ Learning focus:
 - Duplicate prevention.
 
 Interview output:
+
 - Explain why retries can cause duplicate sends.
 - Explain how idempotency keys help client retries.
 - Explain the hard case: worker crashes after provider success but before DB update.
@@ -168,6 +187,7 @@ Interview output:
 Goal: make failures debuggable.
 
 Deliverables:
+
 - [ ] Add structured logging.
 - [ ] Add request ID/correlation ID.
 - [ ] Include queue job ID in worker logs.
@@ -176,12 +196,14 @@ Deliverables:
 - [ ] Document operational debugging steps.
 
 Learning focus:
+
 - Production debugging.
 - Log context.
 - Health checks.
 - Metrics thinking.
 
 Interview output:
+
 - Explain which IDs should appear in logs.
 - Explain how to debug a failed notification.
 - Explain why metrics and logs solve different problems.
@@ -192,6 +214,7 @@ Interview output:
 Goal: add GraphQL where it makes sense, after the core REST flow is stable.
 
 Deliverables:
+
 - [ ] Add GraphQL module.
 - [ ] Add query for notification detail.
 - [ ] Add query for notification history with filters/pagination.
@@ -200,6 +223,7 @@ Deliverables:
 - [ ] Add DataLoader only if the query shape needs it.
 
 Learning focus:
+
 - GraphQL schema design.
 - Resolver design.
 - Pagination in GraphQL.
@@ -207,6 +231,7 @@ Learning focus:
 - REST vs GraphQL trade-offs.
 
 Interview output:
+
 - Explain why REST is used for commands and GraphQL for reads in this project.
 - Explain how GraphQL can create N+1 query problems.
 - Explain when DataLoader is useful.
@@ -217,6 +242,7 @@ Interview output:
 Goal: run the full stack consistently.
 
 Deliverables:
+
 - [ ] Add Dockerfile for API.
 - [ ] Add worker run command or worker Docker setup.
 - [ ] Update Docker Compose for API + worker + MySQL + Redis.
@@ -225,12 +251,14 @@ Deliverables:
 - [ ] Document common local troubleshooting steps.
 
 Learning focus:
+
 - Dockerfile.
 - Docker Compose networking.
 - Startup order.
 - Build-time vs runtime configuration.
 
 Interview output:
+
 - Explain how containers communicate in Docker Compose.
 - Explain why migrations should be explicit.
 - Explain the difference between local dev and production runtime.
@@ -240,6 +268,7 @@ Interview output:
 Goal: turn the project into interview material.
 
 Deliverables:
+
 - [ ] Update `SYSTEM_DESIGN.md` with the final implemented flow.
 - [ ] Add failure scenario notes.
 - [ ] Add scaling notes.
@@ -248,12 +277,14 @@ Deliverables:
 - [ ] Prepare 10 interview questions from the project.
 
 Learning focus:
+
 - System design communication.
 - Trade-off explanation.
 - Failure analysis.
 - Clear English explanation.
 
 Interview output:
+
 - Explain the whole notification platform in 5 minutes.
 - Explain the main trade-offs.
 - Explain how the system scales.
@@ -262,6 +293,7 @@ Interview output:
 ## Phase Completion Criteria
 
 Each phase is only done when all of these are true:
+
 - At least one working API or system flow exists.
 - Verification exists through Postman or automated tests.
 - A short design note explains the key trade-off.
@@ -271,6 +303,7 @@ Each phase is only done when all of these are true:
 ## Weekly Review Checklist
 
 Answer these every week:
+
 - What did I build this week?
 - Which part actually runs?
 - What did I verify with Postman or tests?

@@ -1,6 +1,7 @@
 # Backend Engineering Journey
 
 ## Current Status
+
 - Backend Developer
 - 1.5 years experience
 - Main stack:
@@ -11,9 +12,11 @@
   - Docker
 
 ## Current Goal
+
 Become strong mid-level backend engineer.
 
 Focus areas:
+
 - Backend architecture
 - Scalability
 - Production systems
@@ -24,10 +27,12 @@ Focus areas:
 - Interview preparation
 
 ## English Level
+
 - VSTEP B2
 - Goal: communicate backend concepts fluently in English.
 
 ## Learning Philosophy
+
 - Build deeply instead of many shallow projects.
 - Focus on production thinking.
 - Learn by implementing systems.

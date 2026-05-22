@@ -5,6 +5,7 @@ This document describes the design direction for the notification platform pet p
 ## Goals
 
 The system should:
+
 - Receive notification requests through an API.
 - Store notifications and delivery status in MySQL.
 - Process notification delivery asynchronously through Redis/BullMQ and workers.
@@ -16,6 +17,7 @@ The system should:
 ## Non-Goals For Early Versions
 
 The early versions do not need:
+
 - Kafka implementation.
 - SMS, push notification, or webhook channels.
 - Real email provider integration.
@@ -31,6 +33,7 @@ Kafka should be kept as a comparison topic only. The project should first prove 
 ### REST First
 
 REST is the primary API style for command/write and operational flows:
+
 - `POST /notifications`
 - `GET /notifications`
 - `GET /notifications/:id`
@@ -41,6 +44,7 @@ REST is a good fit here because notification commands are explicit, easy to test
 ### GraphQL Later
 
 GraphQL should be added after the REST flow works and should focus on read/query use cases:
+
 - Notification detail.
 - Notification history.
 - Delivery attempts.
@@ -75,6 +79,7 @@ GraphQL Read API --> MySQL
 ### API Service
 
 Responsibilities:
+
 - Validate requests.
 - Create notification records.
 - Create delivery records.
@@ -83,6 +88,7 @@ Responsibilities:
 - Expose GraphQL read queries later.
 
 Current repo status:
+
 - NestJS app exists.
 - Health and Users modules exist.
 - Prisma/MySQL exists.
@@ -90,12 +96,14 @@ Current repo status:
 ### MySQL
 
 Responsibilities:
+
 - Store users.
 - Store notification requests.
 - Store delivery attempts/status.
 - Support filtering and pagination.
 
 Important design points:
+
 - Use a transaction when creating notification and delivery records together.
 - Add indexes based on real query patterns.
 - Keep provider response/error data for debugging.
@@ -103,6 +111,7 @@ Important design points:
 ### Redis/BullMQ
 
 Responsibilities:
+
 - Buffer delivery jobs.
 - Let the API return quickly.
 - Allow worker concurrency.
@@ -112,6 +121,7 @@ Responsibilities:
 ### Worker Service
 
 Responsibilities:
+
 - Consume queue jobs.
 - Load notification/delivery data.
 - Check current status before sending.
@@ -123,14 +133,17 @@ Responsibilities:
 ### Provider Layer
 
 Responsibilities:
+
 - Hide provider-specific implementation.
 - Normalize success/failure responses.
 - Classify retryable vs non-retryable errors.
 
 First implementation:
+
 - Mock email provider.
 
 Delayed implementations:
+
 - Real email provider.
 - SMS provider.
 - Push provider.
@@ -169,9 +182,11 @@ NotificationDelivery
 ```
 
 Possible channel values:
+
 - `EMAIL`
 
 Possible status values:
+
 - `PENDING`
 - `PROCESSING`
 - `SENT`
@@ -179,6 +194,7 @@ Possible status values:
 - `CANCELLED`
 
 Future channel values:
+
 - `SMS`
 - `PUSH`
 - `WEBHOOK`
@@ -224,11 +240,13 @@ Future channel values:
 ### Retry
 
 Retry should be used for temporary failures:
+
 - Provider timeout.
 - Network error.
 - 5xx provider response.
 
 Do not retry permanent failures:
+
 - Invalid email.
 - Missing required payload.
 - Unauthorized provider config.
@@ -236,22 +254,26 @@ Do not retry permanent failures:
 ### Idempotency
 
 The system needs to avoid duplicate sends when:
+
 - The client retries a create request.
 - The queue retries a job.
 - The worker crashes after the provider call but before the database update.
 
 Early approach:
+
 - Accept `idempotencyKey` from the caller.
 - Add a unique constraint where appropriate.
 - Worker checks delivery status before sending.
 
 Hard case to understand:
+
 - If the provider succeeds but the worker crashes before updating MySQL, the queue may retry and send again.
 - A stronger solution may require provider-level idempotency, provider message IDs, or an outbox-style design.
 
 ### Failed Jobs
 
 Failed jobs should be inspectable:
+
 - Notification ID.
 - Delivery ID.
 - Attempt count.
@@ -263,9 +285,11 @@ Failed jobs should be inspectable:
 ### Worker Crash
 
 Risk:
+
 - A job may be retried after the worker stops unexpectedly.
 
 Expected behavior:
+
 - The job should return to the queue or be retried.
 - The worker should check delivery status before sending again.
 - Logs should include job ID, notification ID, and delivery ID.
@@ -273,9 +297,11 @@ Expected behavior:
 ### Provider Timeout
 
 Risk:
+
 - The provider may receive the request but the worker may not receive the response.
 
 Expected behavior:
+
 - Treat timeout as retryable.
 - Record the timeout error.
 - Understand that duplicate send is still possible without provider-level idempotency.
@@ -283,29 +309,35 @@ Expected behavior:
 ### Duplicate Client Request
 
 Risk:
+
 - A client may retry `POST /notifications` because it did not receive a response.
 
 Expected behavior:
+
 - If the same `idempotencyKey` is used, the API should return the existing notification instead of creating a duplicate.
 
 ### Queue Retry
 
 Risk:
+
 - Retried jobs can repeat side effects.
 
 Expected behavior:
+
 - Worker should avoid sending if delivery is already `SENT`.
 - Retry count and last error should be visible.
 
 ## Performance And Scaling
 
 Early version:
+
 - One API instance.
 - One worker.
 - MySQL.
 - Redis.
 
 Scaling path:
+
 - Add more stateless API instances.
 - Add more workers.
 - Tune worker concurrency.
@@ -314,6 +346,7 @@ Scaling path:
 - Separate read-heavy GraphQL queries if needed.
 
 Key bottlenecks to watch:
+
 - MySQL writes during high notification volume.
 - Queue backlog.
 - Provider rate limits.
@@ -323,6 +356,7 @@ Key bottlenecks to watch:
 ## Observability
 
 Logs should include:
+
 - `requestId`
 - `notificationId`
 - `deliveryId`
@@ -333,6 +367,7 @@ Logs should include:
 - `errorCode`
 
 Metrics to add later:
+
 - Notifications created count.
 - Deliveries sent count.
 - Deliveries failed count.
@@ -341,6 +376,7 @@ Metrics to add later:
 - Provider latency.
 
 Health checks:
+
 - API process.
 - MySQL connection.
 - Redis connection.
@@ -362,7 +398,10 @@ GraphQL later:
 ```graphql
 type Query {
   notification(id: ID!): Notification
-  notifications(filter: NotificationFilter, pagination: PaginationInput): NotificationConnection!
+  notifications(
+    filter: NotificationFilter
+    pagination: PaginationInput
+  ): NotificationConnection!
 }
 ```
 
@@ -381,6 +420,7 @@ Example create payload:
 ## Interview Notes
 
 Important explanations to practice:
+
 - Why the API should enqueue jobs instead of sending notifications directly.
 - Why notification and delivery are separate records.
 - Why retries need idempotency.
@@ -392,6 +432,7 @@ Important explanations to practice:
 ## Open Decisions
 
 Decided for now:
+
 - REST first, GraphQL later.
 - Mock email provider first.
 - Redis/BullMQ before Kafka.
@@ -399,6 +440,7 @@ Decided for now:
 - No complex auth until the core notification flow works.
 
 Still open:
+
 - Should the first auth version use JWT or API keys?
 - Should `NotificationTemplate` be introduced before or after queue processing?
 - Should the worker live inside the same NestJS app or as a separate app in the monorepo?
