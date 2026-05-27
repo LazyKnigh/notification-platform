@@ -1,6 +1,6 @@
 $kind: http-request
 name: Get Users
-url: '{{base_url}}/users'
+url: '{{base_url}}/api/v1/users'
 method: GET
 scripts:
   - type: afterResponse

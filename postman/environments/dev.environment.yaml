@@ -1,6 +1,6 @@
 name: dev
 values:
   - key: base_url
-    value: ''
+    value: 'http://localhost:3000'
   - key: user_id
     value: ''
