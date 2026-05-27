@@ -1,35 +1,39 @@
-# Notification Platform
+# Backend Engineering Journey
 
-This repository was created for learning RESTful API concepts through a small notification platform project.
+## Current Status
 
-The main goal is to practice how backend APIs are designed, implemented, and organized. The project is intended for hands-on learning, not production use.
+- Backend Developer
+- 1.5 years experience
+- Main stack:
+  - Node.js
+  - NestJS
+  - MySQL
+  - Redis
+  - Docker
 
-## Learning Goals
+## Current Goal
 
-- Understand RESTful API structure and conventions.
-- Practice building endpoints for creating, reading, updating, and deleting resources.
-- Learn how request validation, response formats, and HTTP status codes work.
-- Explore backend project organization with NestJS.
-- Practice connecting an API service with a database layer using Prisma.
+Become strong mid-level backend engineer.
 
-## Project Structure
+Focus areas:
 
-```text
-apps/
-  api/        NestJS API service
-docs/         Project notes and documentation
-```
+- Backend architecture
+- Scalability
+- Production systems
+- Distributed systems fundamentals
+- Docker & DevOps basics
+- Queue systems
+- System design
+- Interview preparation
 
-## API Service
+## English Level
 
-The API service is located in `apps/api`.
+- VSTEP B2
+- Goal: communicate backend concepts fluently in English.
 
-```bash
-cd apps/api
-npm install
-npm run start:dev
-```
+## Learning Philosophy
 
-## Purpose
-
-This repository is a personal learning project focused on RESTful API fundamentals. It is used to experiment with backend concepts, improve API design skills, and build a stronger understanding of how real API services are structured.
+- Build deeply instead of many shallow projects.
+- Focus on production thinking.
+- Learn by implementing systems.
+- Use AI as mentor/reviewer/interviewer.
