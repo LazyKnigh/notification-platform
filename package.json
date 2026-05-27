@@ -4,10 +4,12 @@
   "private": true,
   "description": "Learning-focused notification platform for production backend engineering.",
   "scripts": {
+    "build": "npm run api:build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
+    "test": "npm run api:test",
     "api:build": "npm --prefix apps/api run build",
     "api:test": "npm --prefix apps/api run test",
     "api:start:dev": "npm --prefix apps/api run start:dev"

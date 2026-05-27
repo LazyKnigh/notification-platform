@@ -77,12 +77,12 @@ Goal: make the repo reliable to run and easy to explain.
 
 Deliverables:
 
-- [ ] Improve README with local setup instructions.
-- [ ] Add `.env.example`.
-- [ ] Document required services: MySQL now, Redis later.
-- [ ] Confirm `npm run lint`, `npm run test`, and `npm run build`.
-- [ ] Decide API base path/versioning convention.
-- [ ] Define a simple error response convention.
+- [x] Improve README with local setup instructions.
+- [x] Add `.env.example`.
+- [x] Document required services: MySQL now, Redis later.
+- [x] Confirm `npm run lint`, `npm run test`, and `npm run build`.
+- [x] Decide API base path/versioning convention.
+- [x] Define a simple error response convention.
 
 Learning focus:
 
