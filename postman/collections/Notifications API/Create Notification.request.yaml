@@ -1,0 +1,32 @@
+$kind: http-request
+name: Create Notification
+url: '{{base_url}}/api/v1/notifications'
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+        "userId": {{user_id}},
+        "channel": "EMAIL",
+        "payload": {
+            "subject": "Welcome",
+            "body": "Thanks for joining the notification platform."
+        }
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 200 or 201", function () {
+        pm.expect([200, 201]).to.include(pm.response.code);
+      });
+
+      pm.test("Response has notification id and delivery", function () {
+        const json = pm.response.json();
+        pm.expect(json.id).to.exist;
+        pm.expect(json.deliveries).to.be.an("array").that.is.not.empty;
+        pm.environment.set("notification_id", json.id);
+      });
+    language: text/javascript
+order: 1000000000001

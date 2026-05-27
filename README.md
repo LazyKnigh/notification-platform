@@ -63,6 +63,11 @@ Current endpoints:
 - `POST /api/v1/users`
 - `GET /api/v1/users`
 - `GET /api/v1/users/:id`
+- `POST /api/v1/notifications`
+- `GET /api/v1/notifications`
+- `GET /api/v1/notifications/:id`
+
+`GET /api/v1/notifications` supports offset pagination with `page` and `limit`, plus filters for `userId`, `status`, `channel`, `createdFrom`, and `createdTo`.
 
 REST is the primary interface for commands and operational flows. GraphQL will be added later for read/query flows after the core notification system is stable.
 
@@ -100,6 +105,7 @@ Run these checks from the repo root:
 ```sh
 npm run lint
 npm run test
+npm run test:e2e
 npm run build
 ```
 

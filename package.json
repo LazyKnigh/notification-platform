@@ -12,6 +12,8 @@
     "test": "npm run api:test",
     "api:build": "npm --prefix apps/api run build",
     "api:test": "npm --prefix apps/api run test",
+    "api:test:e2e": "npm --prefix apps/api run test:e2e",
+    "test:e2e": "npm run api:test:e2e",
     "api:start:dev": "npm --prefix apps/api run start:dev"
   },
   "devDependencies": {
